@@ -13,6 +13,93 @@
 .contact-photo{background-image:linear-gradient(90deg,rgba(10,17,20,.92),rgba(10,17,20,.77)),url("https://res.cloudinary.com/pcuis0hp/image/upload/v1792178725/IMG_2603.jpg");padding:90px 0}
 .contact-photo h2{color:#fff}.contact-photo .contact-grid>div>p{color:#d4dfe1}.contact-photo .contact-grid>div a:not(.btn){color:#ffb399}.contact-photo form{background:rgba(255,255,255,.97);backdrop-filter:blur(12px)}
 @media(max-width:650px){.process-photo,.reviews-photo,.faq-photo,.contact-photo{background-position:center}.reviews-photo{padding-top:65px!important}.contact-photo{padding:65px 0}.faq-photo .faq-sidebar{background:#131a1df0}}
+
+/* Mobile quality pass: cards, menus, forms, modal and the assistant */
+html{overflow-x:clip}body{overflow-x:clip}img,video{max-width:100%}main,section{min-width:0}
+@media(max-width:850px){
+ .nav-inner{gap:12px}.nav-links{max-height:calc(100dvh - 68px);overflow-y:auto;overscroll-behavior:contain}
+ .hero-video .hero-grid{min-height:0;display:flex;flex-direction:column;justify-content:center}
+ .hero-video .hero-grid>.reveal{width:100%;max-width:660px}
+ .services{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .service{min-width:0}.service h3{overflow-wrap:break-word}
+ .story{grid-template-columns:minmax(0,1fr)}.story-copy{min-width:0}
+ .contact-grid{grid-template-columns:minmax(0,1fr);gap:24px}
+ .footer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .footer-grid>*{min-width:0}
+ .faq-layout{grid-template-columns:minmax(0,1fr)}
+}
+@media(max-width:600px){
+ .wrap{width:calc(100% - 36px);max-width:100%}
+ .top .wrap{justify-content:center;text-align:center}
+ .top .wrap>*{line-height:1.45}
+ .nav-inner{min-height:66px}.nav-links{top:66px}
+ .hero-video{min-height:0}.hero-video .hero-grid{min-height:0;padding:75px 0 72px}
+ .hero-video h1{font-size:clamp(38px,10vw,56px);letter-spacing:-2px;line-height:1.1;margin:20px 0}
+ .hero-video .lead{font-size:15px;line-height:1.75}
+ .hero-video .ctas{display:grid;grid-template-columns:1fr;width:100%;gap:10px}
+ .hero-video .ctas>.btn{width:100%;white-space:normal;text-align:center}
+ .hero-video .hero-brand-mark{margin-top:16px;max-width:170px}
+ .brands .wrap{display:flex;flex-direction:column;align-items:flex-start;gap:15px}
+ .brandnames{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;gap:12px 20px;font-size:15px}
+ .section{padding:66px 0}
+ .heading{margin-bottom:25px}.heading h2,.faq-heading h2{font-size:clamp(31px,8vw,43px);letter-spacing:-1.5px}
+ .heading p{font-size:13px;line-height:1.75}
+ .services{grid-template-columns:minmax(0,1fr);gap:13px}
+ .service{min-height:285px;padding:27px 23px}
+ .service h3{font-size:21px}.service p{font-size:13px;line-height:1.7}
+ .service-more{min-height:46px}
+ .action-video-heading h2{font-size:clamp(31px,8vw,45px)}
+ .action-video-bottom>span{line-height:1.7}
+ .story img{min-height:0;height:280px}.story-copy{padding:42px 22px 50px}
+ .story-copy h2{font-size:clamp(31px,8vw,43px);letter-spacing:-1.5px}
+ .story-actions{display:grid;grid-template-columns:1fr;gap:18px}
+ .story-more-btn{width:100%}
+ .steps{grid-template-columns:minmax(0,1fr);gap:10px}
+ .step{padding:25px 22px}
+ .gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .gallery img{width:100%;height:170px}
+ .gallery img:first-child{grid-column:1/-1;height:240px}
+ .google-reviews{padding:24px 18px}.reviews-top{gap:14px}
+ .reviews-top h3{font-size:clamp(26px,7vw,35px)}
+ .google-brand{align-self:flex-start}
+ .google-rating-overview{flex-wrap:wrap}
+ .faq-heading{margin-bottom:26px}
+ .faq-sidebar{padding:25px}
+ .faq-item summary{min-height:64px;gap:12px;overflow-wrap:anywhere}
+ .faq-item>p{padding-right:0}
+ .faq-end{gap:18px}
+ .contact-photo{padding:70px 0}.contact-grid{padding:0}
+ .contact h2{font-size:clamp(31px,8vw,43px);letter-spacing:-1.5px}
+ .contact form{padding:23px 18px}
+ .contact .field input,.contact .field select,.contact .field textarea{width:100%}
+ .footer-cta h2{font-size:clamp(30px,8vw,43px)}
+ .footer-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 18px}
+ .footer-menu a{overflow-wrap:anywhere}
+ .footer-bottom{flex-wrap:wrap}
+ .story-modal,.service-dialog{width:calc(100% - 20px);max-height:calc(100dvh - 20px);border-radius:12px}
+ .story-modal-image{min-height:160px;height:180px}.story-modal-content{padding:24px 20px}
+ .service-dialog-top{padding:15px 20px}.service-dialog-body{padding:24px 20px 28px}
+ .service-dialog-media{height:180px}
+ .chat-widget{right:max(12px,env(safe-area-inset-right));bottom:max(14px,env(safe-area-inset-bottom));z-index:100}
+ .chat-launcher{width:60px;height:60px}.chat-launcher img{width:50px}
+ .chat-panel{position:fixed;left:10px;right:10px;top:auto;bottom:calc(86px + env(safe-area-inset-bottom));width:auto;max-width:none;height:min(570px,calc(100dvh - 112px - env(safe-area-inset-bottom)));max-height:calc(100dvh - 112px - env(safe-area-inset-bottom));border-radius:15px;transform:none}
+ .chat-messages{min-height:0;flex:1;overscroll-behavior:contain}
+ .chat-footer{flex-shrink:0;padding:11px}
+ .chat-footer form{min-width:0}
+ .chat-footer input{font-size:16px!important;min-height:46px;line-height:1.4}
+ .chat-footer form button{min-width:44px;min-height:46px}
+ .chat-bubble{right:0;bottom:77px;width:min(272px,calc(100vw - 34px))}
+}
+@media(min-width:601px){.chat-footer input{font-size:16px}}
+@media(max-width:375px){
+ .wrap{width:calc(100% - 28px)}
+ .hero-video h1{font-size:36px}
+ .footer-grid{grid-template-columns:minmax(0,1fr)}
+ .footer-grid>div{grid-column:auto}
+ .chat-header{gap:6px;padding:12px}
+ .chat-header img{width:65px}
+ .chat-panel{left:7px;right:7px}
+}
 </style><script type="application/ld+json">{"@context":"https://schema.org","@type":"AutoRepair","name":"SPA 1.0","description":"Diagnóstico automotriz, mantenimiento preventivo y reparación especializada en Ford, Jeep, Toyota y Chevrolet.","address":{"@type":"PostalAddress","addressLocality":"Caracas","addressRegion":"Distrito Capital","addressCountry":"VE","streetAddress":"Bella Vista"},"hasMap":"https://maps.app.goo.gl/gAuzwrmENfc9biu1A?g_st=ic","sameAs":["https://www.instagram.com/spaunopuntocero/","https://maps.app.goo.gl/gAuzwrmENfc9biu1A?g_st=ic"]}</script><link rel="icon" href="/assets/spa-10-logo.svg" type="image/svg+xml"></head><body>
 <div class="top"><div class="wrap"><span>Servicio automotriz especializado · Caracas, Venezuela</span><span class="secondary">Bella Vista · Ford · Jeep · Toyota · Chevrolet</span></div></div>
 <header class="nav"><div class="wrap nav-inner"><a class="logo logo-image" href="#inicio" aria-label="SPA 1.0 Inicio"><img src="/assets/spa-10-logo.svg" alt="SPA 1.0" class="brand-logo" width="142" height="40"></a><nav class="nav-links" id="nav-links"><a href="#servicios">Servicios</a><a href="#nosotros">Nosotros</a><a href="#proceso">Cómo trabajamos</a><a href="#preguntas">Preguntas</a><a href="#asistente" data-open-chat="true">Contacto</a></nav><a href="#asistente" data-open-chat="true" class="btn primary">Solicitar diagnóstico ↗</a><button class="menu" aria-label="Abrir menú" aria-expanded="false" id="menu">☰</button></div></header>
