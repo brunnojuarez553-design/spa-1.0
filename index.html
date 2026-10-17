@@ -175,20 +175,39 @@ target.replaceChildren(viewport);
  if(!launch)return;
  // The public WhatsApp number must be verified with the shop before enabling.
  const WHATSAPP='584122942494';
- let history=[],lead={},busy=false,initiated=false,bubbleDismissed=false,context='';
- const first='¡Hola! Bienvenido a SPA 1.0. Puedo ayudarte con nuestros servicios, ubicación o una consulta sobre tu vehículo. ¿Qué necesitás?';
+ let history=[],lead={},busy=false,initiated=false,bubbleDismissed=false,context='',greetingVersion=0,greetingPending=false;
+ const first='¡Hola! Soy el asistente virtual de SPA 1.0. ¿En qué puedo ayudarte con tu vehículo?';
  function add(role,text,error=false){const el=document.createElement('div');el.className='chat-message '+role+(error?' error':'');el.textContent=text;messages.append(el);messages.scrollTop=messages.scrollHeight}
- async function welcome(){messages.replaceChildren();history=[];lead={};context='';waBox.hidden=true;add('assistant','Conectando con el asistente de SPA 1.0…');try{const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),12000);let response;try{response=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({greeting:true,messages:[],lead:{}}),signal:controller.signal})}finally{clearTimeout(timeout)}const payload=await response.json();if(!response.ok||!payload.reply)throw Error(payload.error||'No se pudo iniciar la conversación');messages.replaceChildren();add('assistant',payload.reply);history.push({role:'assistant',content:payload.reply});}catch(err){messages.replaceChildren();add('assistant',first);add('assistant','Podés escribirme tu consulta. Si el servicio de IA no responde, intentá nuevamente en unos instantes.',true)}}
- function toggle(force){const isOpen=force===undefined?panel.hidden:force;panel.hidden=!isOpen;launch.setAttribute('aria-expanded',String(isOpen));bubble.hidden=true;bubbleDismissed=true;if(isOpen){if(!initiated){initiated=true;welcome()}input.focus()}}
+ async function welcome(){
+   const version=++greetingVersion;
+   greetingPending=true;history=[];lead={};context='';waBox.hidden=true;messages.replaceChildren();
+   const pending=document.createElement('div');pending.className='chat-message assistant';pending.textContent='Conectando con SPA 1.0…';messages.append(pending);messages.scrollTop=messages.scrollHeight;
+   input.disabled=true;form.querySelector('button').disabled=true;
+   try{
+     const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),12000);let response;
+     try{response=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({greeting:true,messages:[],lead:{}}),signal:controller.signal})}
+     finally{clearTimeout(timeout)}
+     const payload=await response.json();
+     if(!response.ok||typeof payload.reply!=='string'||!payload.reply.trim())throw Error('Groq no disponible');
+     if(version!==greetingVersion)return;
+     pending.remove();add('assistant',payload.reply.trim());history=[{role:'assistant',content:payload.reply.trim()}];
+   }catch(err){
+     if(version!==greetingVersion)return;
+     pending.remove();add('assistant',first);history=[{role:'assistant',content:first}];
+   }finally{
+     if(version===greetingVersion){greetingPending=false;input.disabled=false;form.querySelector('button').disabled=false}
+   }
+ }
+ function toggle(force){const isOpen=force===undefined?panel.hidden:force;panel.hidden=!isOpen;launch.setAttribute('aria-expanded',String(isOpen));bubble.hidden=true;bubbleDismissed=true;if(isOpen&&!initiated){initiated=true;welcome()}}
  function openWithContext(label){toggle(true);if(label&&label!==context){context=label;input.value='Quiero consultar por '+label+'.';input.focus()}}
  document.querySelectorAll('a[data-open-chat]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();const serviceCard=a.closest('.service-dialog')||a.closest('.faq-section')||a.closest('.story')||a.closest('.footer')||a.closest('.hero');const label=a.dataset.serviceLabel||((serviceCard&&serviceCard.classList.contains('service-dialog'))?document.getElementById('serviceDialogTitle').textContent:'');const serviceDlg=document.getElementById('serviceDialog'),storyDlg=document.getElementById('storyDialog');if(serviceDlg?.open)serviceDlg.close();if(storyDlg?.open)storyDlg.close();openWithContext(label)}));
  document.querySelectorAll('.service-more').forEach(b=>b.addEventListener('click',()=>{const title=b.closest('.service')?.querySelector('h3')?.textContent;const cta=document.getElementById('serviceDialogCTA');if(cta&&title)cta.dataset.serviceLabel=title}));
  launch.addEventListener('click',()=>toggle());document.getElementById('chatClose').addEventListener('click',()=>toggle(false));
  document.getElementById('dismissBubble').addEventListener('click',()=>{bubble.hidden=true;bubbleDismissed=true});
- reset.addEventListener('click',()=>{if(!busy){welcome();input.focus()}});
+ reset.addEventListener('click',()=>{if(!busy){input.value='';welcome()}});
  window.setTimeout(()=>{if(!bubbleDismissed&&panel.hidden)bubble.hidden=false},45000);
  function updateWhatsApp(ready){const number=String(WHATSAPP).replace(/\D/g,'');waBox.hidden=!(ready&&number);if(waBox.hidden)return;const message=['Hola, vengo de la web de SPA 1.0.','Nombre: '+lead.name,'Vehículo: '+lead.vehicle,'Año: '+lead.year,'Servicio: '+(lead.service||'Por confirmar'),'Síntoma o consulta: '+(lead.issue||'Sin especificar')].join('\n');waLink.href='https://wa.me/'+number+'?text='+encodeURIComponent(message)}
- form.addEventListener('submit',async e=>{e.preventDefault();const text=input.value.trim();if(!text||busy)return;input.value='';add('user',text);history.push({role:'user',content:text});busy=true;input.disabled=true;form.querySelector('button').disabled=true;const pending=document.createElement('div');pending.className='chat-message assistant';pending.textContent='Escribiendo…';messages.append(pending);messages.scrollTop=messages.scrollHeight;
+ form.addEventListener('submit',async e=>{e.preventDefault();const text=input.value.trim();if(!text||busy||greetingPending)return;input.value='';add('user',text);history.push({role:'user',content:text});busy=true;input.disabled=true;form.querySelector('button').disabled=true;const pending=document.createElement('div');pending.className='chat-message assistant';pending.textContent='Escribiendo…';messages.append(pending);messages.scrollTop=messages.scrollHeight;
  try{const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:history,lead})});const d=await r.json();pending.remove();if(!r.ok||!d.reply)throw new Error(d.error||'No pudimos responder.');lead=d.lead||lead;add('assistant',d.reply);history.push({role:'assistant',content:d.reply});updateWhatsApp(Boolean(d.ready));}
  catch(err){pending.remove();history.pop();add('assistant',err.message||'No se pudo conectar. Intentá nuevamente.',true)}
  finally{busy=false;input.disabled=false;form.querySelector('button').disabled=false;input.focus()}
