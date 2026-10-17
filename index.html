@@ -232,4 +232,7 @@ target.replaceChildren(viewport);
  finally{busy=false;input.disabled=false;form.querySelector('button').disabled=false;input.focus()}
  });
 })();
+</script><script>
+/* One-time, touch-safe swipe preview for the mobile services carousel. */
+(()=>{const carousel=document.querySelector('.services');if(!carousel||!('IntersectionObserver'in window))return;const mobile=window.matchMedia('(max-width:600px)'),reduced=window.matchMedia('(prefers-reduced-motion: reduce)');let played=false,touched=false;['touchstart','pointerdown','scroll'].forEach(evt=>carousel.addEventListener(evt,()=>{touched=true},{passive:true}));const observer=new IntersectionObserver(entries=>{if(played||!entries.some(e=>e.isIntersecting)||!mobile.matches||reduced.matches)return;played=true;observer.disconnect();setTimeout(()=>{if(touched||!mobile.matches||carousel.scrollLeft>5)return;const distance=Math.min(105,carousel.clientWidth*.27);carousel.scrollTo({left:distance,behavior:'smooth'});setTimeout(()=>{if(!touched&&mobile.matches)carousel.scrollTo({left:0,behavior:'smooth'})},1050)},420)},{threshold:.45});observer.observe(carousel)})();
 </script></body></html>
