@@ -220,6 +220,7 @@ target.replaceChildren(viewport);
  function openWithContext(label){toggle(true);if(label&&label!==context){context=label;input.value='Quiero consultar por '+label+'.';input.focus()}}
  document.querySelectorAll('a[data-open-chat]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();const serviceCard=a.closest('.service-dialog')||a.closest('.faq-section')||a.closest('.story')||a.closest('.footer')||a.closest('.hero');const label=a.dataset.serviceLabel||((serviceCard&&serviceCard.classList.contains('service-dialog'))?document.getElementById('serviceDialogTitle').textContent:'');const serviceDlg=document.getElementById('serviceDialog'),storyDlg=document.getElementById('storyDialog');if(serviceDlg?.open)serviceDlg.close();if(storyDlg?.open)storyDlg.close();openWithContext(label)}));
  document.querySelectorAll('.service-more').forEach(b=>b.addEventListener('click',()=>{const title=b.closest('.service')?.querySelector('h3')?.textContent;const cta=document.getElementById('serviceDialogCTA');if(cta&&title)cta.dataset.serviceLabel=title}));
+ if(new URLSearchParams(window.location.search).get('openChat')==='1'){window.addEventListener('load',()=>toggle(true),{once:true})}
  launch.addEventListener('click',()=>toggle());document.getElementById('chatClose').addEventListener('click',()=>toggle(false));
  document.getElementById('dismissBubble').addEventListener('click',()=>{bubble.hidden=true;bubbleDismissed=true});
  reset.addEventListener('click',()=>{if(!busy){input.value='';welcome()}});
